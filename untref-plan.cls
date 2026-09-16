@@ -36,9 +36,14 @@
 % CUERPO = Times New Roman. Ni los parrafos, ni el estilo Normal, ni
 % docDefaults declaran <w:rFonts>, asi que Word cae a su fuente por
 % defecto (Times New Roman) -- NO a la minorFont del tema (Calibri).
+% Ligatures=TeX solo habilita los atajos de tipeo de LaTeX (-- da un guion
+% medio, --- una raya, `` y '' dan comillas tipograficas). No altera la fuente.
 \IfFontExistsTF{Times New Roman}
   {\setmainfont{Times New Roman}[Ligatures=TeX]}
-  {\setmainfont{TeX Gyre Termes}[Ligatures=TeX]}
+  {\setmainfont{TeX Gyre Termes}[Ligatures=TeX]%
+   \ClassWarning{untref-plan}{Times New Roman NO encontrada: se usa TeX Gyre
+   Termes, que tiene las mismas metricas pero NO es la fuente pedida. En
+   Windows deberia estar; si aparece este aviso, revisar la instalacion}}
 % "las ecuaciones deben ser hechas en la misma fuente del texto": matematica
 % con metricas de Times. Si no esta el paquete tex-gyre-math (MiKTeX:
 % mpm --install=tex-gyre-math), cae a la matematica por defecto de LaTeX.
@@ -56,6 +61,22 @@
 % simple, 0 pt antes y despues
 \setlength{\parindent}{0.63cm}
 \setlength{\parskip}{0pt}
+
+% ------------------------------------------- opciones para parecerse a Word
+% El texto compone identico a Word en cuanto a fuente (Times New Roman 12 pt),
+% pero el renglon se arma distinto. Si hace falta acercarlo mas, descomentar:
+%
+% (1) INTERLINEADO. Word con interlineado "simple" en Times 12 pt deja unos
+%     13.8 pt entre lineas base; LaTeX en clase 12pt deja 14.5 pt.
+% \setstretch{0.952}
+%
+% (2) SEPARACION EN SILABAS. Word, por defecto, NO corta palabras al final de
+%     renglon; LaTeX si. Al desactivarla, los cortes de linea coinciden mas con
+%     Word, pero el texto justificado queda con espacios entre palabras mas
+%     grandes y pueden aparecer avisos de "Overfull hbox".
+% \hyphenpenalty=10000
+% \exhyphenpenalty=10000
+% \setlength{\emergencystretch}{3em}
 
 % ---------------------------------------------------------------- titulos
 % numbering.xml abstractNum 2: "%1." y "%1.%2.", negrita, 14 pt (w:sz 28)
