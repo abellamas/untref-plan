@@ -50,6 +50,7 @@ untref-plan.cls     definición del formato, con el origen de cada medida docume
 figuras/            logotipo institucional y figura de ejemplo
 ejemplo-plan.pdf    salida de referencia para comparación
 modelo/             documento original de la cátedra
+doc/                guía de estilo APA de la cátedra
 ```
 
 `plan.pdf` está excluido del control de versiones por tratarse de un archivo
@@ -140,15 +141,76 @@ ninguna de las dos afecta el cumplimiento del formato especificado.
    imagen; esta plantilla la compone con `\begin{equation}`, lo que además
    satisface la consigna de emplear la misma fuente del texto.
 
-## Referencias bibliográficas
+## Citación y referencias
 
-Las referencias se redactan dentro del entorno
-`\begin{referencias} ... \end{referencias}`, una entrada por párrafo, conforme a
-las normas APA adoptadas por UNTREF
-(<https://untref.edu.ar/raesta/normas-apa.php>). Este procedimiento garantiza
-una salida idéntica a la del modelo.
+La norma aplicable es la establecida en la *Guía de estilo APA para citas y
+referencias* de la cátedra, incluida en `doc/guia_APA.pdf`. La plantilla ofrece
+dos procedimientos alternativos.
 
-Como alternativa puede emplearse `biblatex` con `style=apa` y un archivo `.bib`,
-opción que facilita compartir la bibliografía con otros documentos del proyecto,
-si bien introduce diferencias menores respecto del ejemplo provisto por la
-cátedra.
+### Redacción manual
+
+Las referencias se escriben dentro del entorno
+`\begin{referencias} ... \end{referencias}`, una entrada por párrafo. El entorno
+aplica la sangría francesa de 0,75 cm, el justificado y el cuerpo de 12 pt que
+especifica el modelo, sin espacio adicional entre entradas.
+
+### Archivo .bib con apacite
+
+La sección 3 de la guía recomienda `apacite` para la composición en LaTeX. Para
+habilitarlo:
+
+```latex
+\documentclass[apacite]{untref-plan}
+...
+\referenciasbib{referencias}   % lee referencias.bib
+```
+
+Compilación:
+
+```
+lualatex plan.tex
+bibtex plan
+lualatex plan.tex
+lualatex plan.tex
+```
+
+Citas en el texto: `\citeA{clave}` para las narrativas y `\cite{clave}` para las
+parentéticas, conforme a la guía. La opción conserva el formato del modelo
+(título «Referencias.», sangría francesa de 0,75 cm y sin espacio entre
+entradas) y sustituye el «y cols.» que `apacite` emplea en español por «et al.».
+
+Esta modalidad permite compartir un mismo archivo `.bib` con otros documentos
+del proyecto.
+
+### Requisitos de la guía que la plantilla no puede verificar
+
+Los siguientes puntos dependen de la redacción y deben controlarse manualmente:
+
+- se prefiere la cita narrativa, para atribuir con claridad la autoría de cada
+  hallazgo;
+- los estudios previos se describen en tiempo pasado;
+- se consignan únicamente apellidos, sin iniciales ni títulos académicos, en las
+  citas del texto;
+- en la lista de referencias se enumeran todos los autores, sin recurrir a
+  «et al.», con apellido seguido de iniciales;
+- los nombres de revistas se escriben completos, sin abreviaturas;
+- los títulos de artículos, libros y capítulos llevan mayúscula inicial
+  únicamente en la primera palabra y en los nombres propios; los nombres de
+  revistas, en cada palabra principal;
+- las direcciones electrónicas remiten a la página oficial de la editorial o al
+  DOI, y no a fuentes secundarias como ResearchGate, PubMed o JSTOR;
+- toda referencia obtenida mediante herramientas automáticas requiere
+  verificación humana contra la fuente original.
+
+### Limitaciones conocidas de apacite
+
+- `apacite` implementa APA 6: con tres o más autores lista todos los autores en
+  la primera cita narrativa, mientras que APA 7 y la guía de la cátedra
+  requieren «et al.» desde la primera mención. La instrucción `\shortcites` no
+  corrige este comportamiento, de modo que tales citas deben redactarse
+  manualmente.
+- Con babel en español, `apacite` introduce una coma antes de la conjunción
+  final en las citas narrativas de tres o más autores.
+
+En caso de exigirse una correspondencia exacta con los ejemplos de la guía,
+resulta preferible la redacción manual en el entorno `referencias`.

@@ -11,6 +11,14 @@
 % =====================================================================
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{untref-plan}[2026/08/28 Plan de Investigacion UNTREF Ing. de Sonido]
+% Opcion apacite: bibliografia gestionada con un archivo .bib, segun la
+% seccion 3 de la "Guia de estilo APA para citas y referencias" de la
+% catedra (doc/guia_APA.pdf). Sin la opcion, las referencias se escriben a
+% mano en el entorno {referencias}.
+\newif\ifuntref@apacite
+\DeclareOption{apacite}{\untref@apacitetrue}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\ProcessOptions\relax
 \LoadClass[12pt,a4paper]{article}   % Normal = 12 pt (w:sz 24)
 
 \RequirePackage[spanish,es-noquoting,es-tabla]{babel}
@@ -145,6 +153,34 @@
   {\section{Referencias.}\par
    \setlength{\parindent}{-0.751cm}\setlength{\leftskip}{0.751cm}}
   {\par}
+
+% Con la opcion [apacite]: \referenciasbib{archivo} inserta la lista generada
+% desde archivo.bib con el estilo apacite, respetando la misma sangria
+% francesa de 0.75 cm y sin espacio extra entre entradas.
+% Citas: \citeA{clave} para narrativas, \cite{clave} para parenteticas.
+\ifuntref@apacite
+  \RequirePackage[numberedbib]{apacite}
+  \setlength{\bibleftmargin}{0.751cm}
+  \setlength{\bibindent}{-0.751cm}
+  \setlength{\bibitemsep}{0pt}
+  % babel y apacite fijan sus cadenas en \begin{document}, asi que las
+  % redefiniciones van despues: el titulo con punto, como en el modelo, y
+  % "et al." en lugar del "y cols." que apacite usa en espanol (la guia de la
+  % catedra pide "et al.", seccion 1).
+  \AtBeginDocument{%
+    \renewcommand{\refname}{Referencias.}%
+    \renewcommand{\bibname}{Referencias.}%
+    \renewcommand{\BOthers}[1]{et al.\hbox{}}%
+    \renewcommand{\BOthersPeriod}[1]{et al.\hbox{}}}
+  \newcommand{\referenciasbib}[1]{\bibliographystyle{apacite}\bibliography{#1}}
+  % Limitaciones conocidas de apacite frente a la guia de la catedra:
+  %  - apacite implementa APA 6: con tres o mas autores lista todos en la
+  %    primera cita narrativa, mientras APA 7 pide "et al." desde la primera
+  %    mencion. \shortcites no lo corrige. Esas citas hay que escribirlas a
+  %    mano o usar el entorno {referencias}.
+  %  - con babel espanol inserta coma antes de la "y" final de la cita
+  %    narrativa ("Aletta, Oberman, y Kang").
+\fi
 
 % ---------------------------------------------------------------- portada
 \newcommand{\carrera}[1]{\def\untref@carrera{#1}}
