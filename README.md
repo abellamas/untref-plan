@@ -154,10 +154,11 @@ Las referencias se escriben dentro del entorno
 aplica la sangría francesa de 0,75 cm, el justificado y el cuerpo de 12 pt que
 especifica el modelo, sin espacio adicional entre entradas.
 
-### Archivo .bib con apacite
+### Archivo .bib con apacite (APA 6)
 
-La sección 3 de la guía recomienda `apacite` para la composición en LaTeX. Para
-habilitarlo:
+La sección 3 de la guía recomienda `apacite` para la composición en LaTeX. El
+paquete permanece en su versión 6.03, de 2013, e implementa la sexta edición del
+manual APA. Para habilitarlo:
 
 ```latex
 \documentclass[apacite]{untref-plan}
@@ -181,6 +182,45 @@ entradas) y sustituye el «y cols.» que `apacite` emplea en español por «et a
 
 Esta modalidad permite compartir un mismo archivo `.bib` con otros documentos
 del proyecto.
+
+### Archivo .bib con biblatex-apa (APA 7)
+
+`biblatex-apa` implementa la séptima edición del manual APA desde noviembre de
+2019 y es la única alternativa actualizada a esa edición. Requiere `biber` como
+procesador de bibliografía. Para habilitarlo:
+
+```latex
+\documentclass[biblatex]{untref-plan}
+\bibliografia{referencias}     % en el preámbulo; lee referencias.bib
+...
+\referenciasbib                % en el cuerpo, donde va la lista
+```
+
+Compilación:
+
+```
+lualatex plan.tex
+biber plan
+lualatex plan.tex
+lualatex plan.tex
+```
+
+Citas en el texto: `\textcite{clave}` para las narrativas y `\parencite{clave}`
+para las parentéticas. En el archivo `.bib`, el campo `doi` se consigna sin la
+dirección completa (`doi = {10.3390/ijerph15112392}`), a diferencia de `apacite`.
+
+Diferencias observadas entre ambas rutas, con idéntico archivo `.bib`:
+
+| Aspecto | apacite | biblatex-apa |
+|---|---|---|
+| Edición del manual | 6.ª | 7.ª |
+| Tres o más autores, primera cita narrativa | lista todos los autores | «et al.» |
+| Conjunción en la lista de referencias | «y» | «&» |
+| Tesis | «(Tesis doctoral)» | «[Tesis doctoral]» |
+| Procesador | `bibtex` | `biber` |
+
+Ambas opciones conservan el título «Referencias.», la sangría francesa de
+0,75 cm y la ausencia de espacio entre entradas que especifica el modelo.
 
 ### Requisitos de la guía que la plantilla no puede verificar
 

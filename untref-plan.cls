@@ -15,8 +15,11 @@
 % seccion 3 de la "Guia de estilo APA para citas y referencias" de la
 % catedra (doc/guia_APA.pdf). Sin la opcion, las referencias se escriben a
 % mano en el entorno {referencias}.
+% La opcion [biblatex] usa biblatex-apa, que si implementa APA 7.
 \newif\ifuntref@apacite
+\newif\ifuntref@biblatex
 \DeclareOption{apacite}{\untref@apacitetrue}
+\DeclareOption{biblatex}{\untref@biblatextrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 \LoadClass[12pt,a4paper]{article}   % Normal = 12 pt (w:sz 24)
@@ -180,6 +183,25 @@
   %    mano o usar el entorno {referencias}.
   %  - con babel espanol inserta coma antes de la "y" final de la cita
   %    narrativa ("Aletta, Oberman, y Kang").
+\fi
+
+% Con la opcion [biblatex]: biblatex-apa, que implementa APA 7 (et al. desde la
+% primera cita, "&" en la lista, tesis entre corchetes). Requiere biber.
+%   preambulo:  \bibliografia{referencias}      % lee referencias.bib
+%   cuerpo:     \referenciasbib
+%   citas:      \textcite{clave} narrativa, \parencite{clave} parentetica
+%   compilar:   lualatex -> biber -> lualatex -> lualatex
+% En el .bib, el campo doi va sin la URL: doi = {10.3390/ijerph15112392}.
+\ifuntref@biblatex
+  \RequirePackage[style=apa,backend=biber]{biblatex}
+  \DeclareLanguageMapping{spanish}{spanish-apa}
+  \setlength{\bibhang}{0.751cm}      % misma sangria francesa que el modelo
+  \setlength{\bibitemsep}{0pt}       % sin espacio extra entre entradas
+  % biblatex deja glue elastico entre los caracteres de una URL, y al justificar
+  % el DOI aparece con espacios ("https : / / doi . org"). Esto lo elimina.
+  \appto{\biburlsetup}{\Urlmuskip=0mu\relax}
+  \newcommand{\bibliografia}[1]{\addbibresource{#1.bib}}
+  \newcommand{\referenciasbib}{\section{Referencias.}\printbibliography[heading=none]}
 \fi
 
 % ---------------------------------------------------------------- portada
