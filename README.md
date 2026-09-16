@@ -15,20 +15,90 @@ desvíos respecto de la consigna.
 |---|---|
 | Motor de compilación | LuaLaTeX o XeLaTeX. No compila con pdfLaTeX, dado que la clase emplea `fontspec` |
 | Fuentes tipográficas | Times New Roman y Calibri, tomadas del sistema |
-| Paquete adicional | `tex-gyre-math`, para la composición matemática con métricas de Times |
-
-Instalación del paquete matemático:
-
-```
-mpm --install=tex-gyre-math     # MiKTeX
-tlmgr install tex-gyre-math     # TeX Live
-```
+| Procesador de bibliografía | `bibtex` con la opción `apacite`; `biber` con la opción `biblatex` |
 
 En sistemas donde Times New Roman o Calibri no estén disponibles, la clase
 sustituye por TeX Gyre Termes y Carlito respectivamente, que son métricamente
 equivalentes, y emite una advertencia durante la compilación. Si falta
 `tex-gyre-math`, la clase informa la ausencia y continúa con la composición
 matemática por defecto de LaTeX.
+
+## Instalación del entorno de compilación
+
+### Distribución de LaTeX
+
+| Sistema | Distribución | Instalación |
+|---|---|---|
+| Windows | MiKTeX | <https://miktex.org/download>, o `winget install MiKTeX.MiKTeX` |
+| macOS | MacTeX | <https://tug.org/mactex/>, o `brew install --cask mactex` |
+| Linux | TeX Live | `sudo apt install texlive-full` (Debian/Ubuntu) o el equivalente de la distribución |
+
+En MiKTeX conviene dejar activada la instalación de paquetes por demanda
+(*Install missing packages on the fly*), de modo que los paquetes faltantes se
+descarguen durante la primera compilación. En TeX Live, la instalación completa
+ya incluye todo lo necesario.
+
+### Paquetes requeridos
+
+La clase utiliza los siguientes paquetes. Todos forman parte de las
+distribuciones habituales, con excepción de `tex-gyre-math`, que en MiKTeX puede
+requerir instalación explícita.
+
+| Paquete | Función |
+|---|---|
+| `fontspec` | carga de las fuentes del sistema |
+| `babel` (español) | idioma, guionado y títulos |
+| `geometry` | márgenes |
+| `graphicx` | inclusión del logotipo y las figuras |
+| `amsmath`, `unicode-math` | ecuaciones |
+| `tex-gyre-math` | matemática con métricas de Times |
+| `titlesec` | formato de los títulos |
+| `enumitem` | viñetas y listas |
+| `caption` | epígrafes de figura |
+| `array`, `multirow`, `xcolor` | tabla del diagrama de Gantt |
+| `setspace` | interlineado |
+| `apacite` | bibliografía APA 6 (opción `apacite`) |
+| `biblatex`, `biblatex-apa`, `biber` | bibliografía APA 7 (opción `biblatex`) |
+
+Instalación explícita, si alguno faltara:
+
+```
+mpm --install=tex-gyre-math --install=biblatex-apa --install=apacite   # MiKTeX
+tlmgr install tex-gyre-math biblatex-apa apacite                       # TeX Live
+```
+
+Verificación de que los componentes están disponibles:
+
+```
+kpsewhich apacite.sty apa.bbx texgyretermes-math.otf
+biber --version
+```
+
+### Fuentes tipográficas
+
+Times New Roman y Calibri se instalan con Microsoft Office y están presentes en
+Windows. En macOS y Linux, si no estuvieran disponibles, la clase recurre
+automáticamente a TeX Gyre Termes y Carlito. En Debian y Ubuntu ambas se
+obtienen con:
+
+```
+sudo apt install tex-gyre fonts-crosextra-carlito
+```
+
+### Editor
+
+Cualquier editor de texto resulta suficiente. Dos alternativas habituales son
+TeXstudio, que incluye visor de PDF integrado, y Visual Studio Code con la
+extensión LaTeX Workshop. En ambos casos debe configurarse **LuaLaTeX** como
+motor de compilación, dado que el predeterminado suele ser pdfLaTeX.
+
+### Compilación en Overleaf
+
+La plantilla compila en Overleaf seleccionando LuaLaTeX en la configuración del
+proyecto. Debe tenerse en cuenta que Overleaf no dispone de Times New Roman ni
+de Calibri, de modo que la clase aplicará las sustituciones métricamente
+equivalentes y advertirá al respecto. Para una salida idéntica a la del modelo
+se recomienda compilar localmente.
 
 ## Compilación
 
