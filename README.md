@@ -239,6 +239,17 @@ aumentar. Ambas directivas quedan documentadas en el encabezado de
    letra dentro del 2 %. El único elemento que conserva una diferencia
    apreciable es el nombre de la carrera, 5 px más abajo, por la altura
    sobrante de la tabla del logotipo.
+6. **Espaciado de los títulos de sección.** El estilo `heading 1` del modelo
+   declara `w:spacing before="480" after="120"`, es decir 24 pt y 6 pt. Esos
+   valores no se trasladan literalmente, porque Word los suma a la altura de
+   línea mientras `titlesec` los mide desde la línea base anterior. Se
+   calibraron midiendo los cuatro títulos de la página 2 contra el PDF que Word
+   exporta del modelo: el hueco anterior coincide en 18,0 pt y el posterior da
+   18,7 pt frente a 19,4 pt. Los valores resultantes son `13,4 pt` y `15 pt`.
+   Además, `\maketitle` no termina con un `\vspace`: el espacio que separa el
+   nombre del investigador del primer título lo aporta el `before-skip` de
+   `\titlespacing`, y los dos se suman en lugar de absorberse, de modo que un
+   `\vspace` allí duplicaba el hueco.
 
 ## Citación y referencias
 

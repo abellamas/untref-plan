@@ -106,10 +106,14 @@
   {\untrefnum{0.614cm}{\thesection.}}{0pt}{}
 \titleformat{\subsection}[hang]{\untrefheadfont}%
   {\hspace*{0.614cm}\untrefnum{0.762cm}{\thesubsection.}}{0pt}{}
-% ponytail: el .docx separa titulos con parrafos vacios de 14 pt; aca es el
-% \titlespacing equivalente. Tocar estos dos valores si el ojo pide mas aire.
-\titlespacing*{\section}{0pt}{17pt}{17pt}
-\titlespacing*{\subsection}{0pt}{17pt}{17pt}
+% El estilo Heading1 del modelo declara <w:spacing before=480 after=120>, es
+% decir 24 pt y 6 pt. Esos valores NO se pueden trasladar tal cual: Word los
+% suma al alto de linea y titlesec los mide desde la linea base anterior. Los
+% de abajo estan calibrados midiendo los cuatro titulos de la pagina 2 contra
+% el PDF que Word exporta del modelo: el hueco anterior da 18.0 pt en los dos,
+% y el posterior 18.7 pt contra 19.4 pt.
+\titlespacing*{\section}{0pt}{13.4pt}{15pt}
+\titlespacing*{\subsection}{0pt}{13.4pt}{15pt}
 \setcounter{secnumdepth}{2}
 
 % ---------------------------------------------------------------- listas
@@ -267,5 +271,9 @@
   {\centering
    {\bfseries\fontsize{14pt}{17pt}\selectfont\@title\par}
    \vspace{17pt}%  [37] parrafo Title-2 vacio de 14 pt
-   {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}
-  \vspace{17pt}}
+   {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}}
+% \maketitle NO cierra con un \vspace: el espacio que separa el nombre del
+% investigador del primer titulo lo pone el before-skip de \titlespacing, y los
+% dos se suman en lugar de absorberse. Con un \vspace{17pt} aca el hueco medido
+% daba 38.9 pt contra los 20.2 pt del PDF que Word exporta del modelo; sin el,
+% da 21.6 pt.
