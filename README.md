@@ -227,19 +227,35 @@ aumentar. Ambas directivas quedan documentadas en el encabezado de
 4. **Composición de ecuaciones.** El modelo inserta la ecuación de ejemplo como
    imagen; esta plantilla la compone con `\begin{equation}`, lo que además
    satisface la consigna de emplear la misma fuente del texto.
-5. **Espaciado vertical de la carátula.** Los tres `\vspace` que separan el
-   logotipo, el título, el subtítulo y el bloque de autor y tutores no
-   corresponden a la conversión directa de los párrafos vacíos del modelo, sino
-   a valores calibrados midiendo la carátula compilada contra la que exporta
-   Word, elemento por elemento, sobre una imagen a 110 ppp. La razón es que la
-   tabla de maquetado del logotipo compone unos 7 pt más alta que en Word y que
-   el bloque de autor y tutores, a interlineado doble real, ocupa unos 72 pt
-   más. Con esos valores, once de los doce elementos de la carátula quedan a 2
-   px o menos de su posición en Word —medio milímetro— y todos los cuerpos de
-   letra dentro del 2 %. El único elemento que conserva una diferencia
-   apreciable es el nombre de la carrera, 5 px más abajo, por la altura
-   sobrante de la tabla del logotipo.
-6. **Espaciado de los títulos de sección.** El estilo `heading 1` del modelo
+5. **Espaciado vertical de la carátula.** Los cuatro `\vspace` que separan el
+   logotipo, el nombre de la carrera, el título, el subtítulo y el bloque de
+   autor y tutores no corresponden a la conversión directa de los párrafos
+   vacíos del modelo, sino a valores calibrados midiendo, elemento por elemento
+   y sobre una imagen a 110 ppp, el PDF que Word exporta del propio modelo. La
+   razón es que el bloque de autor y tutores, a interlineado doble real, ocupa
+   más que en Word, y ese excedente hay que descontarlo del hueco anterior.
+   Resultado de la medición:
+
+   | Elemento de la carátula | Modelo | Plantilla | Diferencia |
+   |---|---:|---:|---:|
+   | Nombre de la carrera | 279 px | 279 px | 0,0 mm |
+   | Título | 411 px | 411 px | 0,0 mm |
+   | Subtítulo | 491 px | 490 px | 0,2 mm |
+   | Autor | 723 px | 722 px | 0,2 mm |
+   | Tutor | 775 px | 773 px | 0,5 mm |
+   | Cotutor | 827 px | 827 px | 0,0 mm |
+   | Marco del logotipo, borde superior | 136 px | 131 px | 1,2 mm |
+
+   El marco del logotipo compone 141 px de alto frente a los 136 px del modelo,
+   de modo que su borde inferior coincide pero el superior queda 5 px más
+   arriba. La diferencia proviene del puntal que `array` inserta en cada fila;
+   `\arraystretch` a 0 la reduce de 11 px a 5 px.
+6. **Posición de la fecha de defensa.** En el modelo, la fecha queda 33 px
+   —7,6 mm— más arriba que en la plantilla, porque debajo de ella todavía
+   aparece el título de la investigación. Al moverlo a la página siguiente
+   (desviación 1), la fecha pasa a ser el último elemento de la carátula y se
+   apoya en el margen inferior. Ambas versiones terminan a la misma altura.
+7. **Espaciado de los títulos de sección.** El estilo `heading 1` del modelo
    declara `w:spacing before="480" after="120"`, es decir 24 pt y 6 pt. Esos
    valores no se trasladan literalmente, porque Word los suma a la altura de
    línea mientras `titlesec` los mide desde la línea base anterior. Se

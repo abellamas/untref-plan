@@ -228,6 +228,11 @@
 \newcommand{\untref@encabezado}{%
   \hspace*{-1.31cm}%
   \setlength{\tabcolsep}{0pt}%
+  % arraystretch a 0 anula el puntal que array pone en cada fila. Sin esto la
+  % fila crece con la profundidad del puntal y el borde inferior baja: el marco
+  % medido daba 147 px contra los 136 px del modelo, y con esto da 141 px, con
+  % el borde inferior en la misma linea que el modelo.
+  \renewcommand{\arraystretch}{0}%
   \begin{tabular}{|p{3.79cm}|p{14.46cm}|}\hline
     \rule{0pt}{3.11cm} & \includegraphics[width=13.58cm,height=3.11cm]{figuras/logo-untref.png}\tabularnewline\hline
   \end{tabular}}
@@ -235,19 +240,23 @@
 \renewcommand{\maketitle}{%
   \begin{titlepage}
   \centering\portadafont
-  \vspace*{15pt}%                         [0][1] parrafos vacios de 14 pt
+  \vspace*{16.3pt}%                         [0][1] parrafos vacios de 14 pt
   \untref@encabezado\par
+  \vspace{3.9pt}%  hueco que el modelo deja entre el marco y la carrera
   % "INGENIERIA DE SONIDO" usa el estilo Subtitle del .docx: w:sz 36 = 18 pt,
   % igual que el subtitulo del plan (no 16 pt).
   {\fontsize{18pt}{22pt}\selectfont\untref@carrera\par}
-  % Los tres huecos de abajo estan calibrados midiendo el PDF contra el que
-  % exporta Word: la tabla del logo compone 7 pt mas alta que en Word y el
-  % bloque de autor y tutores, a doble espacio real, ocupa 72 pt mas.
-  \vspace{40.3pt}%                        [5][6][7] vacios de 18 pt
+  % Los cuatro \vspace de la portada estan calibrados midiendo, elemento por
+  % elemento y sobre una imagen a 110 ppp, el PDF que Word exporta del modelo.
+  % No son la conversion directa de los parrafos vacios del .docx: el bloque de
+  % autor y tutores, a interlineado doble real, ocupa mas que en Word y hay que
+  % descontarlo del hueco anterior. Con estos valores la carrera, el titulo, el
+  % subtitulo y el bloque de autor caen a 2 px o menos de su posicion en Word.
+  \vspace{64.5pt}%                        [5][6][7] vacios de 18 pt
   {\bfseries\fontsize{22pt}{26.8pt}\selectfont\@title\par}
-  \vspace{15.7pt}%                        [9] vacio de 22 pt
+  \vspace{28.8pt}%                        [9] vacio de 22 pt
   {\fontsize{18pt}{22pt}\selectfont\untref@subtitulo\par}
-  \vspace{67.2pt}%                        [11]-[18] vacios
+  \vspace{115.6pt}%                        [11]-[18] vacios
   % OJO CON EL ORDEN: \setstretch de setspace reaplica \@currsize, asi que si va
   % DESPUES de \selectfont pisa el cuerpo elegido y vuelve a 12 pt. Va antes.
   % Estilo EmphasisID del .docx: w:sz 28 = 14 pt, negrita, w:line 480 = doble.
