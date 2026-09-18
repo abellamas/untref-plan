@@ -1,4 +1,5 @@
 # Salidas de compilación
+build/
 plan.pdf
 *.aux
 *.log

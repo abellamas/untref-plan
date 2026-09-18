@@ -103,11 +103,29 @@ se recomienda compilar localmente.
 ## Compilación
 
 ```
-lualatex plan.tex
-lualatex plan.tex
+latexmk
 ```
 
-Se requieren dos pasadas para resolver las referencias cruzadas.
+El archivo `.latexmkrc` del repositorio fija LuaLaTeX como motor, llama a
+`biber` cuando hace falta y deja todo lo generado en `build/`, incluido el PDF,
+de modo que el directorio de trabajo no se ensucia.
+
+| Orden | Efecto |
+|---|---|
+| `latexmk` | compila; el resultado queda en `build/plan.pdf` |
+| `latexmk -pvc` | recompila cada vez que se guarda |
+| `latexmk -c` | borra los auxiliares y conserva el PDF |
+| `latexmk -C` | borra también el PDF |
+
+Sin `latexmk`, el ciclo manual es `lualatex`, `biber`, `lualatex`, `lualatex`:
+dos pasadas resuelven las referencias cruzadas y la tercera incorpora la
+bibliografía. Con la opción `apacite` el procesador es `bibtex` en lugar de
+`biber`.
+
+La directiva `@default_files` del `.latexmkrc` es necesaria porque `latexmk`
+sin argumentos compila todos los `.tex` del directorio. Importa cuando el plan
+se parte en un archivo por sección y `plan.tex` los carga con `\input`: los
+fragmentos no compilan por sí solos.
 
 El contenido se redacta exclusivamente en `plan.tex`. La totalidad del formato
 reside en `untref-plan.cls`, cuyas definiciones no requieren modificación.
@@ -121,6 +139,7 @@ completo.
 ## Estructura del repositorio
 
 ```
+.latexmkrc          configuración de latexmk: LuaLaTeX, biber y salida en build/
 plan.tex            documento de trabajo
 untref-plan.cls     definición del formato, con el origen de cada medida documentado
 figuras/            logotipo institucional y figura de ejemplo
@@ -130,9 +149,10 @@ modelo/             documento original de la cátedra
 doc/                guía de estilo APA de la cátedra
 ```
 
-`plan.pdf` está excluido del control de versiones por tratarse de un archivo
-generado en cada compilación. La salida de referencia versionada es
-`ejemplo-plan.pdf`.
+El directorio `build/` está excluido del control de versiones por contener
+únicamente archivos generados en cada compilación. La salida de referencia
+versionada es `ejemplo-plan.pdf`, que se actualiza a mano con
+`cp build/plan.pdf ejemplo-plan.pdf`.
 
 El archivo contenido en `modelo/` es material de cátedra de UNTREF y se incluye
 únicamente como referencia del formato exigido.
