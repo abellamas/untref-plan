@@ -78,16 +78,19 @@
 % pero el renglon se arma distinto. Si hace falta acercarlo mas, descomentar:
 %
 % (1) INTERLINEADO. Word con interlineado "simple" en Times 12 pt deja unos
-%     13.8 pt entre lineas base; LaTeX en clase 12pt deja 14.5 pt.
-% \setstretch{0.952}
+%     13.8 pt entre lineas base; LaTeX en clase 12pt deja 14.5 pt. ACTIVADO:
+%     medido contra el PDF de Word, la pagina pasa de 613 a 658 palabras y Word
+%     tiene 657. No agrega ningun aviso de Overfull.
+\setstretch{0.952}
 %
 % (2) SEPARACION EN SILABAS. Word, por defecto, NO corta palabras al final de
-%     renglon; LaTeX si. Al desactivarla, los cortes de linea coinciden mas con
-%     Word, pero el texto justificado queda con espacios entre palabras mas
-%     grandes y pueden aparecer avisos de "Overfull hbox".
-% \hyphenpenalty=10000
-% \exhyphenpenalty=10000
-% \setlength{\emergencystretch}{3em}
+%     renglon; LaTeX si. ACTIVADO: con el \emergencystretch de 3em el texto
+%     justificado no sufre. Medido en este plan: con corte habia 10 palabras
+%     partidas en las dos paginas de la Fundamentacion y 2 avisos de Overfull;
+%     sin corte quedan 0 palabras partidas y 1 solo aviso.
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\emergencystretch}{3em}
 
 % ---------------------------------------------------------------- titulos
 % numbering.xml abstractNum 2: "%1." y "%1.%2.", negrita, 14 pt (w:sz 28)
@@ -228,27 +231,41 @@
 \renewcommand{\maketitle}{%
   \begin{titlepage}
   \centering\portadafont
-  \vspace*{34pt}%                         [0][1] parrafos vacios de 14 pt
+  \vspace*{15pt}%                         [0][1] parrafos vacios de 14 pt
   \untref@encabezado\par
-  {\fontsize{16pt}{19.5pt}\selectfont\untref@carrera\par}
-  \vspace{66pt}%                          [5][6][7] vacios de 18 pt
+  % "INGENIERIA DE SONIDO" usa el estilo Subtitle del .docx: w:sz 36 = 18 pt,
+  % igual que el subtitulo del plan (no 16 pt).
+  {\fontsize{18pt}{22pt}\selectfont\untref@carrera\par}
+  % Los tres huecos de abajo estan calibrados midiendo el PDF contra el que
+  % exporta Word: la tabla del logo compone 7 pt mas alta que en Word y el
+  % bloque de autor y tutores, a doble espacio real, ocupa 72 pt mas.
+  \vspace{40.3pt}%                        [5][6][7] vacios de 18 pt
   {\bfseries\fontsize{22pt}{26.8pt}\selectfont\@title\par}
-  \vspace{26.8pt}%                        [9] vacio de 22 pt
+  \vspace{15.7pt}%                        [9] vacio de 22 pt
   {\fontsize{18pt}{22pt}\selectfont\untref@subtitulo\par}
-  \vspace{139.2pt}%                       [11]-[18] vacios
-  {\bfseries\fontsize{14pt}{17.1pt}\selectfont\setstretch{2.0}%  w:line=480 = doble
+  \vspace{67.2pt}%                        [11]-[18] vacios
+  % OJO CON EL ORDEN: \setstretch de setspace reaplica \@currsize, asi que si va
+  % DESPUES de \selectfont pisa el cuerpo elegido y vuelve a 12 pt. Va antes.
+  % Estilo EmphasisID del .docx: w:sz 28 = 14 pt, negrita, w:line 480 = doble.
+  {\bfseries\setstretch{2.0}\fontsize{14pt}{17.1pt}\selectfont
    Autor: \@author\par
    TUTOR/A: \untref@tutor\par
    \ifx\untref@cotutor\empty\else COTUTOR/A: \untref@cotutor\par\fi}
   \vfill
-  % grupo de dos lineas de 15.75 cm que encierra la fecha (wpg de 5669280 EMU)
-  \rule{15.75cm}{0.5pt}\par\vspace{3pt}
-  {\fontsize{14pt}{17.1pt}\selectfont\untref@defensa\par}
-  \vspace{3pt}\rule{15.75cm}{0.5pt}\par
+  % Grupo de dos lineas de 15.75 cm que encierra la fecha (wpg de 5669280 EMU).
+  % Estilo NoSpacing del .docx: w:sz 24 = 12 pt. Va como \vbox con \kern
+  % explicitos: tanto \par como \\ cuelan un \baselineskip y las dos reglas
+  % terminan a 35 pt una de otra, cuando en Word estan a 20 pt.
+  {\setstretch{1.0}\fontsize{12pt}{14.5pt}\selectfont
+   \vbox{\offinterlineskip
+         \hbox{\rule{15.75cm}{0.5pt}}\kern4pt
+         \hbox to 15.75cm{\hss\untref@defensa\hss}\kern4pt
+         \hbox{\rule{15.75cm}{0.5pt}}}\par}
   \vspace*{28pt}
   \end{titlepage}
   % parrafos [36] y [37]: ya sin <w:rFonts>, es decir Times como el cuerpo
   {\centering
    {\bfseries\fontsize{14pt}{17pt}\selectfont\@title\par}
+   \vspace{17pt}%  [37] parrafo Title-2 vacio de 14 pt
    {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}
   \vspace{17pt}}

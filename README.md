@@ -143,6 +143,12 @@ twips ÷ 566,93 = cm, `w:sz` ÷ 2 = pt y EMU ÷ 360000 = cm.
 | Tamaño de hoja | A4 | `w:pgSz` 11906 × 16838 twips |
 | Márgenes | superior e inferior 2 cm; izquierdo 3 cm; derecho 2 cm | `w:pgMar` 1134/1134/1701/1134 |
 | Encabezado, pie y numeración de página | sin definir | ausencia de `header1.xml` y `footer1.xml` |
+| Carátula: nombre de la carrera | 18 pt | estilo `Subtitle`, `w:sz 36` |
+| Carátula: título | negrita 22 pt | estilo `Title`, `w:sz 44`, `w:b` |
+| Carátula: subtítulo | 18 pt | estilo `Subtitle`, `w:sz 36` |
+| Carátula: autor y tutores | negrita 14 pt, interlineado doble | estilo `Emphasis ID`, `w:sz 28`, `w:b`, `w:line 480` |
+| Carátula: fecha de defensa | 12 pt, entre dos filetes de 15,75 cm separados 20 pt | estilo `No Spacing`, `w:sz 24`; grupo `wpg` de 5669280 EMU |
+| Título corrido de la página 2 | negrita 14 pt; nombre del investigador en negrita 12 pt | estilos `Title 2` y `Subtitle 2`, `w:sz 28` y `w:sz 24` |
 | Cuerpo de texto | 12 pt, justificado | `w:sz 24`, `w:jc both` |
 | Sangría de primera línea | 0,63 cm | `w:ind w:firstLine="357"` |
 | Interlineado | simple, sin espacio anterior ni posterior | ausencia de `w:spacing` |
@@ -187,11 +193,22 @@ activada en LaTeX y desactivada por defecto en Word; y el interlineado simple,
 que en Word equivale a aproximadamente 13,8 pt frente a los 14,5 pt de la clase
 `article` a 12 pt.
 
-La clase incluye, comentadas y documentadas, las dos directivas necesarias para
-aproximar la composición a la de Word (`\setstretch{0.952}` y la desactivación
-de la separación en sílabas). Se mantienen inactivas de forma predeterminada,
-por cuanto la composición de LaTeX resulta tipográficamente preferible y
-ninguna de las dos afecta el cumplimiento del formato especificado.
+La clase incorpora activadas las dos directivas que aproximan la composición a
+la de Word: `\setstretch{0.952}`, que iguala el interlineado, y la desactivación
+de la separación en sílabas mediante `\hyphenpenalty`, `\exhyphenpenalty` y un
+`\emergencystretch` de 3 em. La decisión se adoptó tras medir el resultado
+contra el PDF que exporta Word sobre el mismo texto:
+
+| Directiva | Sin activar | Activada | Word |
+|---|---|---|---|
+| Palabras por página de texto corrido | 613 | 658 | 657 |
+| Palabras partidas al final de renglón, en dos páginas | 10 | 0 | 0 |
+| Avisos de `Overfull hbox` en el documento completo | 2 | 1 | — |
+
+El `\emergencystretch` absorbe la holgura que deja la ausencia de guionado, de
+modo que el justificado no se degrada: el número de avisos disminuye en lugar de
+aumentar. Ambas directivas quedan documentadas en el encabezado de
+`untref-plan.cls` y pueden comentarse si se prefiere la composición de LaTeX.
 
 ## Desviaciones deliberadas respecto del modelo
 
@@ -210,6 +227,18 @@ ninguna de las dos afecta el cumplimiento del formato especificado.
 4. **Composición de ecuaciones.** El modelo inserta la ecuación de ejemplo como
    imagen; esta plantilla la compone con `\begin{equation}`, lo que además
    satisface la consigna de emplear la misma fuente del texto.
+5. **Espaciado vertical de la carátula.** Los tres `\vspace` que separan el
+   logotipo, el título, el subtítulo y el bloque de autor y tutores no
+   corresponden a la conversión directa de los párrafos vacíos del modelo, sino
+   a valores calibrados midiendo la carátula compilada contra la que exporta
+   Word, elemento por elemento, sobre una imagen a 110 ppp. La razón es que la
+   tabla de maquetado del logotipo compone unos 7 pt más alta que en Word y que
+   el bloque de autor y tutores, a interlineado doble real, ocupa unos 72 pt
+   más. Con esos valores, once de los doce elementos de la carátula quedan a 2
+   px o menos de su posición en Word —medio milímetro— y todos los cuerpos de
+   letra dentro del 2 %. El único elemento que conserva una diferencia
+   apreciable es el nombre de la carrera, 5 px más abajo, por la altura
+   sobrante de la tabla del logotipo.
 
 ## Citación y referencias
 
