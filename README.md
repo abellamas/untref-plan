@@ -112,6 +112,12 @@ Se requieren dos pasadas para resolver las referencias cruzadas.
 El contenido se redacta exclusivamente en `plan.tex`. La totalidad del formato
 reside en `untref-plan.cls`, cuyas definiciones no requieren modificación.
 
+En `plan.tex` cada párrafo ocupa una sola línea, sin cortes manuales. En LaTeX
+los saltos de línea dentro de un párrafo se componen como espacios, de modo que
+la elección no afecta la salida, pero mantiene el archivo legible como un
+documento de texto y hace que cada modificación se corresponda con un párrafo
+completo.
+
 ## Estructura del repositorio
 
 ```
