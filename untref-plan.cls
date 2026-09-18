@@ -193,7 +193,7 @@
 \fi
 
 % Con la opcion [biblatex]: biblatex-apa, que implementa APA 7 (et al. desde la
-% primera cita, "&" en la lista, tesis entre corchetes). Requiere biber.
+% primera cita, tesis entre corchetes, DOI como URL completa). Requiere biber.
 %   preambulo:  \bibliografia{referencias}      % lee referencias.bib
 %   cuerpo:     \referenciasbib
 %   citas:      \textcite{clave} narrativa, \parencite{clave} parentetica
@@ -207,6 +207,21 @@
   % biblatex deja glue elastico entre los caracteres de una URL, y al justificar
   % el DOI aparece con espacios ("https : / / doi . org"). Esto lo elimina.
   \appto{\biburlsetup}{\Urlmuskip=0mu\relax}
+  % biblatex-apa pone "&" antes del ultimo autor, que es la forma inglesa. En
+  % espanol APA usa "y". El estilo lo fija en tres lugares (apa.bbx linea 727
+  % para la lista, apa.cbx lineas 496 y 393 para las citas); \textcite ya usa
+  % \bibstring{and}, que babel resuelve como "y". Se replican las tres
+  % definiciones cambiando \& por \bibstring{and}.
+  \DeclareDelimFormat[bib,biblist]{finalnamedelim}{%
+    \ifthenelse{\value{listcount}>\maxprtauth}
+      {}
+      {\ifthenelse{\value{liststop}>2}
+         {\finalandcomma\addspace\bibstring{and}\space}
+         {\addspace\bibstring{and}\space}}}
+  \DeclareDelimFormat[parencite]{finalnamedelim}%
+    {\ifnum\value{liststop}>2 \finalandcomma\fi\addspace\bibstring{and}\space}
+  \DeclareDelimFormat[fullcite,fullcitebib]{finalnamedelim}%
+    {\ifnum\value{liststop}>2 \finalandcomma\fi\addspace\bibstring{and}\space}
   \newcommand{\bibliografia}[1]{\addbibresource{#1.bib}}
   \newcommand{\referenciasbib}{\section{Referencias.}\printbibliography[heading=none]}
 \fi

@@ -1,0 +1,108 @@
+% =====================================================================
+%  referencias.bib -- ejemplo de base bibliografica
+%
+%  Se usa con la opcion [biblatex] de la clase, que carga biblatex-apa (APA 7):
+%      \documentclass[biblatex]{untref-plan}
+%      preambulo:  \bibliografia{referencias}
+%      cuerpo:     \referenciasbib
+%      \textcite{clave}  -> cita narrativa    Autor (2019)
+%      \parencite{clave} -> cita parentetica  (Autor, 2019)
+%      compilar:   lualatex -> biber -> lualatex -> lualatex
+%
+%  Con la opcion [apacite] (APA 6) el archivo sirve igual, pero las citas se
+%  escriben \citeA{clave} y \cite{clave}, y se compila con bibtex.
+%
+%  Tres cosas que conviene saber antes de editar este archivo:
+%
+%  1. BibTeX NO entiende el % como comentario. Toma como principio de entrada
+%     cualquier arroba, incluso dentro de una linea comentada, y saltea en
+%     silencio lo que sigue. No escribir arrobas en los comentarios.
+%
+%  2. BibTeX pasa los titulos a minusculas salvo lo que este entre llaves. Los
+%     nombres propios se protegen: {M}orelia, {ISO} 12913, {B}uenos {A}ires.
+%     Cuando el titulo entero es un nombre oficial, va entre dobles llaves.
+%     biblatex no tiene este problema, pero conviene dejarlo protegido por si
+%     se cambia de motor.
+%
+%  3. Los autores institucionales van entre DOBLES llaves, para que no se
+%     partan en nombre y apellido:  author = {{Organizacion Mundial de la Salud}}
+% =====================================================================
+
+% Articulo de revista. El DOI va SIN la URL: biblatex le antepone
+% https://doi.org/ como pide APA 7.
+@article{ejemplo-articulo,
+  author  = {Apellido, Nombre and Otro Apellido, Otro Nombre},
+  year    = {2020},
+  title   = {Titulo del articulo en minusculas, salvo la primera palabra},
+  journal = {Nombre Completo de la Revista},
+  volume  = {12},
+  number  = {3},
+  pages   = {45--58},
+  doi     = {10.0000/ejemplo}
+}
+
+% Libro.
+@book{ejemplo-libro,
+  author    = {Apellido, Nombre},
+  year      = {2018},
+  title     = {Titulo del libro},
+  edition   = {2},
+  publisher = {Editorial},
+  address   = {Ciudad}
+}
+
+% Capitulo de libro.
+@incollection{ejemplo-capitulo,
+  author    = {Apellido, Nombre},
+  year      = {2019},
+  title     = {Titulo del capitulo},
+  booktitle = {Titulo del libro que lo contiene},
+  editor    = {Editor, Nombre},
+  pages     = {101--120},
+  publisher = {Editorial}
+}
+
+% Ponencia de congreso.
+@inproceedings{ejemplo-congreso,
+  author    = {Apellido, Nombre},
+  year      = {2021},
+  title     = {Titulo de la ponencia},
+  booktitle = {Actas del Congreso},
+  address   = {Ciudad, Pais},
+  pages     = {1--8}
+}
+
+% Tesis. biblatex-apa la imprime entre corchetes, como pide APA 7.
+@phdthesis{ejemplo-tesis,
+  author = {Apellido, Nombre},
+  year   = {2019},
+  title  = {Titulo de la tesis},
+  school = {Universidad}
+}
+
+% Norma tecnica. El titulo entero va protegido porque es un nombre oficial.
+@misc{ejemplo-norma,
+  author = {{International Organization for Standardization}},
+  year   = {2018},
+  title  = {{Acoustics --- Soundscape --- Part 2: Data collection and
+            reporting requirements}},
+  note   = {Norma ISO/TS 12913-2:2018}
+}
+
+% Informe institucional.
+@techreport{ejemplo-informe,
+  author      = {{Organismo que lo publica}},
+  year        = {2016},
+  title       = {Titulo del informe},
+  institution = {Organismo},
+  address     = {Ciudad}
+}
+
+% Pagina web o nota periodistica. La URL va en el campo url, no en note.
+@misc{ejemplo-web,
+  author = {Apellido, Nombre},
+  year   = {2021},
+  title  = {Titulo de la nota},
+  note   = {Medio, 23 de agosto de 2021},
+  url    = {https://ejemplo.org/nota}
+}

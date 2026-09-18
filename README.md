@@ -124,6 +124,7 @@ completo.
 plan.tex            documento de trabajo
 untref-plan.cls     definición del formato, con el origen de cada medida documentado
 figuras/            logotipo institucional y figura de ejemplo
+referencias.bib     base bibliográfica de ejemplo, una entrada por tipo de fuente
 ejemplo-plan.pdf    salida de referencia para comparación
 modelo/             documento original de la cátedra
 doc/                guía de estilo APA de la cátedra
@@ -347,12 +348,26 @@ Diferencias observadas entre ambas rutas, con idéntico archivo `.bib`:
 |---|---|---|
 | Edición del manual | 6.ª | 7.ª |
 | Tres o más autores, primera cita narrativa | lista todos los autores | «et al.» |
-| Conjunción en la lista de referencias | «y» | «&» |
+| Conjunción en la lista de referencias | «y» | «y» (véase la nota) |
 | Tesis | «(Tesis doctoral)» | «[Tesis doctoral]» |
+| DOI | `doi: 10.0000/x` | `https://doi.org/10.0000/x` |
 | Procesador | `bibtex` | `biber` |
 
 Ambas opciones conservan el título «Referencias.», la sangría francesa de
 0,75 cm y la ausencia de espacio entre entradas que especifica el modelo.
+
+**Nota sobre la conjunción.** `biblatex-apa` antepone «&» al último autor, que
+es la forma inglesa; en español APA emplea «y». El estilo lo fija en tres
+lugares —`apa.bbx` para la lista de referencias, `apa.cbx` para `\parencite` y
+para `ullcite`—, mientras que `	extcite` ya recurre a `ibstring{and}`, que
+babel resuelve como «y». La clase replica esas tres definiciones sustituyendo
+`\&` por `ibstring{and}`, de modo que la salida no contiene ampersands.
+
+**Riesgo conocido de BibTeX.** El carácter `%` no introduce comentarios en un
+archivo `.bib`: BibTeX interpreta cualquier arroba como principio de entrada,
+incluso dentro de una línea que se pretendía comentada, y omite en silencio lo
+que sigue. Conviene no escribir arrobas en los comentarios. `biber` no presenta
+este comportamiento.
 
 ### Requisitos de la guía que la plantilla no puede verificar
 

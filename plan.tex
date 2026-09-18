@@ -3,7 +3,7 @@
 %  Compilar:  lualatex plan.tex   (dos veces, por las referencias cruzadas)
 %  El formato vive entero en untref-plan.cls -- no hace falta tocarlo.
 % =====================================================================
-\documentclass{untref-plan}
+\documentclass[biblatex]{untref-plan}
 
 % ------------------------------------------------- datos de la portada
 \title{Título del Plan}
@@ -13,6 +13,10 @@
 \cotutor{Nombre y apellido (si lo tuviera)}   % borrar esta línea si no hay cotutor
 \defensa{Fecha de defensa: mes y año | Locación (ej.\ Sáenz Peña), Argentina}
 \investigador{Nombre del Investigador}
+
+% Base bibliografica en APA 7. Sin la opcion [biblatex] del \documentclass,
+% las referencias se escriben a mano en el entorno {referencias}.
+\bibliografia{referencias}
 
 \begin{document}
 \maketitle
@@ -42,7 +46,7 @@ Los objetivos específicos se desarrollan como un punteo de las acciones de la i
 % =====================================================================
 \section{Marco Teórico y Estado del Arte.}
 
-En el Marco Teórico debemos incorporar la bibliografía, artículos de revistas, ponencias de congresos, links de Internet o todo aquello que haya contribuido a formar el cuerpo del saber sobre el que va a basarse la investigación, incorporando los procesos y ecuaciones necesarios. En el Estado del Arte se hará una revisión de las últimas investigaciones sobre el tema que pretendemos investigar, realizando una breve descripción de los puntos de interés de cada una. \textbf{No pueden indicarse menos de 12 referencias} para este plan de investigación.
+En el Marco Teórico debemos incorporar la bibliografía, artículos de revistas, ponencias de congresos, links de Internet o todo aquello que haya contribuido a formar el cuerpo del saber sobre el que va a basarse la investigación, incorporando los procesos y ecuaciones necesarios. En el Estado del Arte se hará una revisión de las últimas investigaciones sobre el tema que pretendemos investigar, realizando una breve descripción de los puntos de interés de cada una. \textbf{No pueden indicarse menos de 12 referencias} para este plan de investigación. Ejemplos de cita: narrativa, \textcite{ejemplo-articulo}; parentética, \parencite{ejemplo-libro}; norma, \parencite{ejemplo-norma}; tesis, \parencite{ejemplo-tesis}; informe, \parencite{ejemplo-informe}.
 
 % =====================================================================
 \section{Diseño de la Investigación.}
@@ -113,14 +117,6 @@ El siguiente diagrama de Gantt enuncia el cronograma de actividades y tareas pre
 % =====================================================================
 % Referencias en APA (https://untref.edu.ar/raesta/normas-apa.php)
 % Sangría francesa de 0.75 cm, justificado, 12 pt -- una entrada por párrafo.
-\begin{referencias}
-
-Aletta, F., Xiao, J., \& Kang, J. (2024). Navigating soundscape standardization: Understanding barriers to the ISO 12913 implementation. \textit{Proceedings of Inter-Noise 2024}, Nantes, France.
-
-International Organization for Standardization. (2014). \textit{Acoustics --- Soundscape --- Part 1: Definition and conceptual framework} (Standard No.\ ISO 12913-1:2014).
-
-Schafer, R. M. (1977). \textit{The tuning of the world}. Alfred A. Knopf.
-
-\end{referencias}
+\referenciasbib
 
 \end{document}
