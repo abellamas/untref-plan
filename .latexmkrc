@@ -18,3 +18,7 @@ $bibtex_use = 2;         # corre biber y borra sus auxiliares al limpiar
 
 # ejemplo-plan.pdf es la salida de referencia versionada y NO se genera aca:
 # se actualiza a mano con  cp build/plan.pdf ejemplo-plan.pdf
+
+# Para entregar el PDF con otro nombre (renombra tambien los auxiliares, que
+# igual viven en build/), descomentar y poner el nombre deseado.
+# $jobname = 'MIC_PI_Apellido';

@@ -293,6 +293,15 @@ aumentar. Ambas directivas quedan documentadas en el encabezado de
    nombre del investigador del primer título lo aporta el `before-skip` de
    `\titlespacing`, y los dos se suman en lugar de absorberse, de modo que un
    `\vspace` allí duplicaba el hueco.
+8. **Folio de página.** El `.docx` del modelo no trae encabezado ni pie, de modo
+   que el original va sin numeración. La plantilla agrega el folio centrado al
+   pie (`\pagestyle{plain}`), porque el documento necesita numerarse para
+   citarse y para las devoluciones. La carátula queda sin número y la primera
+   carilla de texto es la 1. Para volver al modelo literal basta con
+   `\pagestyle{empty}` en `untref-plan.cls`.
+9. **Paquetes para figuras y tablas.** La clase carga `tikz`, `tabularx`,
+   `booktabs` y `float`, que el modelo no usa, para poder incluir esquemas y
+   tablas comparativas en el Marco Teórico.
 
 ## Citación y referencias
 

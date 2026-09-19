@@ -34,13 +34,23 @@
 \RequirePackage{multirow}
 \RequirePackage[table]{xcolor}
 \RequirePackage{setspace}
+% Figuras esquematicas (TikZ) y tablas del marco teorico.
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{float}
 
 % ---------------------------------------------------------------- pagina
 % <w:pgSz w:h="16838" w:w="11906"/> = A4
 % <w:pgMar top=1134 bottom=1134 left=1701 right=1134/> twips = 2/2/3/2 cm
 \RequirePackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=2cm]{geometry}
-% el .docx no trae header1.xml ni footer1.xml: sin encabezado, pie ni folio
-\pagestyle{empty}
+% El .docx no trae header1.xml ni footer1.xml, asi que el modelo va sin
+% encabezado ni pie. Se agrega igual el folio centrado al pie, que el
+% documento necesita para citarse y para las devoluciones de la catedra.
+% El entorno titlepage ya hace \thispagestyle{empty} y reinicia el contador,
+% de modo que la portada queda sin numero y la primera carilla de texto es 1.
+\pagestyle{plain}
 
 % ---------------------------------------------------------------- fuentes
 \RequirePackage{fontspec}
