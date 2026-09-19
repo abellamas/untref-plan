@@ -140,7 +140,8 @@ completo.
 
 ```
 .latexmkrc          configuración de latexmk: LuaLaTeX, biber y salida en build/
-main.tex            documento de trabajo
+main.tex            documento de trabajo; su texto de ejemplo es el del modelo .docx
+ejemplo-biblatex.tex  mismo documento con la bibliografía en referencias.bib (biblatex-apa)
 untref-plan.cls     definición del formato, con el origen de cada medida documentado
 figuras/            logotipo institucional y figura de ejemplo
 referencias.bib     base bibliográfica de ejemplo, una entrada por tipo de fuente
@@ -153,6 +154,12 @@ El directorio `build/` está excluido del control de versiones por contener
 únicamente archivos generados en cada compilación. La salida de referencia
 versionada es `ejemplo-plan.pdf`, que se actualiza a mano con
 `cp build/main.pdf ejemplo-plan.pdf`.
+
+`main.tex` reproduce palabra por palabra el texto del modelo original, incluida
+la lista de referencias, para poder comparar la salida de ambos. Como el modelo
+muestra en la primera página de texto un título distinto del de la carátula
+("Título de la Investigación"), la clase ofrece `\tituloinvestigacion{...}`;
+si no se usa, ese título es el mismo `\title` de la carátula.
 
 El archivo contenido en `modelo/` es material de cátedra de UNTREF y se incluye
 únicamente como referencia del formato exigido.

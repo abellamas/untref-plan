@@ -1,0 +1,123 @@
+% =====================================================================
+%  Plan de Investigacion -- UNTREF, Ingenieria de Sonido
+%  Ejemplo con bibliografia en .bib (biblatex-apa). Compilar con:
+%  latexmk ejemplo-biblatex.tex
+%  El formato vive entero en untref-plan.cls -- no hace falta tocarlo.
+% =====================================================================
+\documentclass[biblatex]{untref-plan}
+
+% ------------------------------------------------- datos de la portada
+\title{Título del Plan}
+\subtitulo{Subtítulo del Plan (si lo tuviera)}
+\author{Nombre y apellido (DNI número)}
+\tutor{Nombre y apellido}
+\cotutor{Nombre y apellido (si lo tuviera)}   % borrar esta línea si no hay cotutor
+\defensa{Fecha de defensa: mes y año | Locación (ej.\ Sáenz Peña), Argentina}
+\investigador{Nombre del Investigador}
+
+% Base bibliografica en APA 7. Sin la opcion [biblatex] del \documentclass,
+% las referencias se escriben a mano en el entorno {referencias}.
+\bibliografia{referencias}
+
+\begin{document}
+\maketitle
+
+% =====================================================================
+\section{Fundamentación e Introducción.}
+
+En la fundamentación debe desarrollarse la pregunta que lleva a la investigación y su justificación. Es habitual incorporar aquí una visión rápida sobre el estado del tema de estudio (la que se profundizará en el Estado del Arte). Lo importante es dejar claro que la investigación que se pretende desarrollar va a llenar algún punto vacío en la ciencia o en la tecnología. El desarrollo mínimo de este punto es una carilla.
+
+La introducción debe finalizar con un resumen de cada una de las partes que forman la investigación, es decir una rápida descripción de lo que va a desarrollarse en cada uno de los títulos o capítulos del documento.
+
+% =====================================================================
+\section{Objetivos General y específicos.}
+
+El objetivo general debe ser expresado en un solo párrafo, de ser posible en una sola oración, y debe reflejar la pregunta que dio origen a la investigación. Los objetivos específicos deben redactarse uno por uno, recordando que el objetivo general se alcanza cumpliendo con todos los objetivos específicos.
+
+Los objetivos específicos se desarrollan como un punteo de las acciones de la investigación que van a realizarse. El análisis de la bibliografía no es un objetivo específico. Podría serlo en caso que se pretenda repetir alguna experiencia de la bibliografía o del estado del arte para verificar alguna cosa. Los objetivos específicos pueden plantearse como sigue:
+
+\begin{itemize}
+  \item Primer objetivo específico.
+  \item Segundo objetivo específico.
+  \item Tercer objetivo específico.
+  \item Cuarto objetivo específico.
+  \item Quinto objetivo específico.
+\end{itemize}
+
+% =====================================================================
+\section{Marco Teórico y Estado del Arte.}
+
+En el Marco Teórico debemos incorporar la bibliografía, artículos de revistas, ponencias de congresos, links de Internet o todo aquello que haya contribuido a formar el cuerpo del saber sobre el que va a basarse la investigación, incorporando los procesos y ecuaciones necesarios. En el Estado del Arte se hará una revisión de las últimas investigaciones sobre el tema que pretendemos investigar, realizando una breve descripción de los puntos de interés de cada una. \textbf{No pueden indicarse menos de 12 referencias} para este plan de investigación. Ejemplos de cita: narrativa, \textcite{ejemplo-articulo}; parentética, \parencite{ejemplo-libro}; norma, \parencite{ejemplo-norma}; tesis, \parencite{ejemplo-tesis}; informe, \parencite{ejemplo-informe}.
+
+% =====================================================================
+\section{Diseño de la Investigación.}
+
+El diseño de investigación implica desarrollar las previsiones generales del plan para el experimento, definiendo el tipo de investigación a realizar, su alcance, etc. Dado que en este ejercicio se trata de evaluar subjetivamente alguna variable, debe explicarse en términos amplios el plan a desarrollar, el que se pormenorizará en los puntos siguientes. Es importante explicar todo el diseño para que se tenga una visión completa, sin redundar en las explicaciones que van a realizarse en los puntos que siguen. De este modo, el lector o evaluador del proyecto tienen una primera impresión de la totalidad.
+
+\subsection{Diseño prueba objetiva: Definición de Variables. Muestra.}
+
+Está claro que si la investigación no tiene una parte subjetiva, el título de este ítem será: Diseño de la Investigación, variables y muestra.
+
+En esta parte deben definirse las variables que serán medidas, y cuáles son las que se estima llevar a la evaluación subjetiva. Debe incluirse un diagrama de los equipos a emplear en las mediciones y un diseño preciso de cómo se llevarán a cabo.
+
+Las ecuaciones y expresiones matemáticas deben estar centradas y numeradas en secuencia, con el número de la ecuación a la derecha y entre paréntesis, utilizando numeración arábiga. En ecuaciones de varias líneas, la numeración debe ser ubicada en la última línea. Las fórmulas y el texto deben ser separados por una línea. Las ecuaciones deben ser hechas en la misma fuente del texto, con los índices 3 puntos abajo. Deben usarse símbolos convencionales y unidades SI. Las ecuaciones deben ser citadas en el texto (``Ecuación~(\ref{eq:ejemplo})'', etc.):
+
+\begin{equation}\label{eq:ejemplo}
+  R' = L_1 - L_2 + 10\log\!\left(\frac{S}{A}\right) \quad \mathrm{dB}
+\end{equation}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=15.39cm,height=6.80cm]{figuras/ejemplo-figura.png}
+  \caption{Figuras centradas con títulos al pie.}
+  \label{fig:ejemplo}
+\end{figure}
+
+\subsection{Diseño prueba subjetiva: Encuesta y Muestra. (si existiera una prueba subjetiva)}
+
+En primer lugar debe definirse si se recurrirá a una muestra probabilística o no probabilística, la cantidad de sujetos que se encuestarán, y la justificación de esa decisión. Aquí debe desarrollarse también de modo completo el cuestionario y el desarrollo de la encuesta, es decir definir las preguntas, las muestras que se presentarán a los encuestados, las series de pruebas, duración, etc. Debe incluso definirse con exactitud el recorrido que hará cada encuestado, el lugar, las características del equipamiento a emplear, etc.
+
+\section{Validación de las pruebas.}
+
+Las pruebas se validarán siguiendo los criterios estadísticos que permiten determinar la existencia o no de errores en alguna o algunas encuestas y considerar si son incluidas o no en el conjunto de respuestas. Como las pruebas no se realizarán todavía, deben plantearse los métodos elegidos y explicarlos.
+
+\section{Análisis de los resultados: Aplicaciones estadísticas.}
+
+Aquí se aplicarán los métodos estadísticos que nos permitan concluir los resultados y proyectar diferentes facetas de los datos obtenidos. Como las pruebas no se realizarán todavía, deben plantearse los métodos elegidos y explicarlos.
+
+% =====================================================================
+\section{Conclusiones.}
+
+En las conclusiones del Plan de Investigación debe plantearse cómo será la exposición de los resultados y qué es lo que se espera obtener en resumen de las pruebas que se realicen.
+
+% =====================================================================
+\section{Líneas futuras de investigación.}
+
+Las líneas futuras de investigación dentro del plan suponen expresar qué posibles cuestiones que se encontrarán se dejarán para ser profundizadas más adelante por otras investigaciones.
+
+% =====================================================================
+\section{Cronograma.}
+
+El siguiente diagrama de Gantt enuncia el cronograma de actividades y tareas previstas al momento de la realización de la investigación.
+
+\bigskip
+% \gX = semana marcada (celda con relleno gris, igual que el .docx).
+% La primera columna va vacia en el modelo: poner ahi el nombre de cada tarea.
+\begin{gantt}
+ &\gX&   &   &   &   &   &   &   &   &   &   &   & & & & \tabularnewline\hline
+ &\gX&   &   &   &   &   &   &   &   &   &   &   & & & & \tabularnewline\hline
+ &\gX&   &   &   &   &   &   &   &   &   &   &   & & & & \tabularnewline\hline
+ &\gX&\gX&   &   &   &   &   &   &   &   &   &   & & & & \tabularnewline\hline
+ &   &   &\gX&   &   &   &   &   &   &   &   &   & & & & \tabularnewline\hline
+ &   &   &   &\gX&\gX&\gX&   &   &   &   &   &   & & & & \tabularnewline\hline
+ &   &   &   &   &   &\gX&\gX&\gX&   &   &   &   & & & & \tabularnewline\hline
+ &   &   &   &   &   &   &   &   &\gX&\gX&\gX&\gX&\gX&\gX&\gX&\gX \tabularnewline\hline
+\end{gantt}
+\bigskip
+
+% =====================================================================
+% Referencias en APA (https://untref.edu.ar/raesta/normas-apa.php)
+% Sangría francesa de 0.75 cm, justificado, 12 pt -- una entrada por párrafo.
+\referenciasbib
+
+\end{document}

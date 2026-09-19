@@ -243,8 +243,12 @@
 \newcommand{\cotutor}[1]{\def\untref@cotutor{#1}}
 \newcommand{\defensa}[1]{\def\untref@defensa{#1}}
 \newcommand{\investigador}[1]{\def\untref@investigador{#1}}
+% Titulo que se repite en la primera pagina de texto. Por defecto es el mismo
+% \title de la caratula; solo hace falta cuando el modelo los muestra distintos.
+\newcommand{\tituloinvestigacion}[1]{\def\untref@tituloinv{#1}}
 \carrera{INGENIER\'IA DE SONIDO}
 \subtitulo{}\cotutor{}\investigador{}
+\let\untref@tituloinv\relax
 
 % Tabla de maquetado del encabezado (tabla 1 del .docx): 1 fila x 2 columnas
 % de 2149 y 8200 twips, bordes visibles, sangrada -743 twips hacia el margen
@@ -303,7 +307,7 @@
   \end{titlepage}
   % parrafos [36] y [37]: ya sin <w:rFonts>, es decir Times como el cuerpo
   {\centering
-   {\bfseries\fontsize{14pt}{17pt}\selectfont\@title\par}
+   {\bfseries\fontsize{14pt}{17pt}\selectfont\ifx\untref@tituloinv\relax\@title\else\untref@tituloinv\fi\par}
    \vspace{17pt}%  [37] parrafo Title-2 vacio de 14 pt
    {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}}
 % \maketitle NO cierra con un \vspace: el espacio que separa el nombre del
