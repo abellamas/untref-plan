@@ -103,29 +103,56 @@ se recomienda compilar localmente.
 ## Compilación
 
 ```
-lualatex plan.tex
-lualatex plan.tex
+latexmk
 ```
 
-Se requieren dos pasadas para resolver las referencias cruzadas.
+El archivo `.latexmkrc` del repositorio fija LuaLaTeX como motor, llama a
+`biber` cuando hace falta y deja todo lo generado en `build/`, incluido el PDF,
+de modo que el directorio de trabajo no se ensucia.
+
+| Orden | Efecto |
+|---|---|
+| `latexmk` | compila; el resultado queda en `build/plan.pdf` |
+| `latexmk -pvc` | recompila cada vez que se guarda |
+| `latexmk -c` | borra los auxiliares y conserva el PDF |
+| `latexmk -C` | borra también el PDF |
+
+Sin `latexmk`, el ciclo manual es `lualatex`, `biber`, `lualatex`, `lualatex`:
+dos pasadas resuelven las referencias cruzadas y la tercera incorpora la
+bibliografía. Con la opción `apacite` el procesador es `bibtex` en lugar de
+`biber`.
+
+La directiva `@default_files` del `.latexmkrc` es necesaria porque `latexmk`
+sin argumentos compila todos los `.tex` del directorio. Importa cuando el plan
+se parte en un archivo por sección y `plan.tex` los carga con `\input`: los
+fragmentos no compilan por sí solos.
 
 El contenido se redacta exclusivamente en `plan.tex`. La totalidad del formato
 reside en `untref-plan.cls`, cuyas definiciones no requieren modificación.
 
+En `plan.tex` cada párrafo ocupa una sola línea, sin cortes manuales. En LaTeX
+los saltos de línea dentro de un párrafo se componen como espacios, de modo que
+la elección no afecta la salida, pero mantiene el archivo legible como un
+documento de texto y hace que cada modificación se corresponda con un párrafo
+completo.
+
 ## Estructura del repositorio
 
 ```
+.latexmkrc          configuración de latexmk: LuaLaTeX, biber y salida en build/
 plan.tex            documento de trabajo
 untref-plan.cls     definición del formato, con el origen de cada medida documentado
 figuras/            logotipo institucional y figura de ejemplo
+referencias.bib     base bibliográfica de ejemplo, una entrada por tipo de fuente
 ejemplo-plan.pdf    salida de referencia para comparación
 modelo/             documento original de la cátedra
 doc/                guía de estilo APA de la cátedra
 ```
 
-`plan.pdf` está excluido del control de versiones por tratarse de un archivo
-generado en cada compilación. La salida de referencia versionada es
-`ejemplo-plan.pdf`.
+El directorio `build/` está excluido del control de versiones por contener
+únicamente archivos generados en cada compilación. La salida de referencia
+versionada es `ejemplo-plan.pdf`, que se actualiza a mano con
+`cp build/plan.pdf ejemplo-plan.pdf`.
 
 El archivo contenido en `modelo/` es material de cátedra de UNTREF y se incluye
 únicamente como referencia del formato exigido.
@@ -143,6 +170,12 @@ twips ÷ 566,93 = cm, `w:sz` ÷ 2 = pt y EMU ÷ 360000 = cm.
 | Tamaño de hoja | A4 | `w:pgSz` 11906 × 16838 twips |
 | Márgenes | superior e inferior 2 cm; izquierdo 3 cm; derecho 2 cm | `w:pgMar` 1134/1134/1701/1134 |
 | Encabezado, pie y numeración de página | sin definir | ausencia de `header1.xml` y `footer1.xml` |
+| Carátula: nombre de la carrera | 18 pt | estilo `Subtitle`, `w:sz 36` |
+| Carátula: título | negrita 22 pt | estilo `Title`, `w:sz 44`, `w:b` |
+| Carátula: subtítulo | 18 pt | estilo `Subtitle`, `w:sz 36` |
+| Carátula: autor y tutores | negrita 14 pt, interlineado doble | estilo `Emphasis ID`, `w:sz 28`, `w:b`, `w:line 480` |
+| Carátula: fecha de defensa | 12 pt, entre dos filetes de 15,75 cm separados 20 pt | estilo `No Spacing`, `w:sz 24`; grupo `wpg` de 5669280 EMU |
+| Título corrido de la página 2 | negrita 14 pt; nombre del investigador en negrita 12 pt | estilos `Title 2` y `Subtitle 2`, `w:sz 28` y `w:sz 24` |
 | Cuerpo de texto | 12 pt, justificado | `w:sz 24`, `w:jc both` |
 | Sangría de primera línea | 0,63 cm | `w:ind w:firstLine="357"` |
 | Interlineado | simple, sin espacio anterior ni posterior | ausencia de `w:spacing` |
@@ -187,11 +220,22 @@ activada en LaTeX y desactivada por defecto en Word; y el interlineado simple,
 que en Word equivale a aproximadamente 13,8 pt frente a los 14,5 pt de la clase
 `article` a 12 pt.
 
-La clase incluye, comentadas y documentadas, las dos directivas necesarias para
-aproximar la composición a la de Word (`\setstretch{0.952}` y la desactivación
-de la separación en sílabas). Se mantienen inactivas de forma predeterminada,
-por cuanto la composición de LaTeX resulta tipográficamente preferible y
-ninguna de las dos afecta el cumplimiento del formato especificado.
+La clase incorpora activadas las dos directivas que aproximan la composición a
+la de Word: `\setstretch{0.952}`, que iguala el interlineado, y la desactivación
+de la separación en sílabas mediante `\hyphenpenalty`, `\exhyphenpenalty` y un
+`\emergencystretch` de 3 em. La decisión se adoptó tras medir el resultado
+contra el PDF que exporta Word sobre el mismo texto:
+
+| Directiva | Sin activar | Activada | Word |
+|---|---|---|---|
+| Palabras por página de texto corrido | 613 | 658 | 657 |
+| Palabras partidas al final de renglón, en dos páginas | 10 | 0 | 0 |
+| Avisos de `Overfull hbox` en el documento completo | 2 | 1 | — |
+
+El `\emergencystretch` absorbe la holgura que deja la ausencia de guionado, de
+modo que el justificado no se degrada: el número de avisos disminuye en lugar de
+aumentar. Ambas directivas quedan documentadas en el encabezado de
+`untref-plan.cls` y pueden comentarse si se prefiere la composición de LaTeX.
 
 ## Desviaciones deliberadas respecto del modelo
 
@@ -210,6 +254,54 @@ ninguna de las dos afecta el cumplimiento del formato especificado.
 4. **Composición de ecuaciones.** El modelo inserta la ecuación de ejemplo como
    imagen; esta plantilla la compone con `\begin{equation}`, lo que además
    satisface la consigna de emplear la misma fuente del texto.
+5. **Espaciado vertical de la carátula.** Los cuatro `\vspace` que separan el
+   logotipo, el nombre de la carrera, el título, el subtítulo y el bloque de
+   autor y tutores no corresponden a la conversión directa de los párrafos
+   vacíos del modelo, sino a valores calibrados midiendo, elemento por elemento
+   y sobre una imagen a 110 ppp, el PDF que Word exporta del propio modelo. La
+   razón es que el bloque de autor y tutores, a interlineado doble real, ocupa
+   más que en Word, y ese excedente hay que descontarlo del hueco anterior.
+   Resultado de la medición:
+
+   | Elemento de la carátula | Modelo | Plantilla | Diferencia |
+   |---|---:|---:|---:|
+   | Nombre de la carrera | 279 px | 279 px | 0,0 mm |
+   | Título | 411 px | 411 px | 0,0 mm |
+   | Subtítulo | 491 px | 490 px | 0,2 mm |
+   | Autor | 723 px | 722 px | 0,2 mm |
+   | Tutor | 775 px | 773 px | 0,5 mm |
+   | Cotutor | 827 px | 827 px | 0,0 mm |
+   | Marco del logotipo, borde superior | 136 px | 131 px | 1,2 mm |
+
+   El marco del logotipo compone 141 px de alto frente a los 136 px del modelo,
+   de modo que su borde inferior coincide pero el superior queda 5 px más
+   arriba. La diferencia proviene del puntal que `array` inserta en cada fila;
+   `\arraystretch` a 0 la reduce de 11 px a 5 px.
+6. **Posición de la fecha de defensa.** En el modelo, la fecha queda 33 px
+   —7,6 mm— más arriba que en la plantilla, porque debajo de ella todavía
+   aparece el título de la investigación. Al moverlo a la página siguiente
+   (desviación 1), la fecha pasa a ser el último elemento de la carátula y se
+   apoya en el margen inferior. Ambas versiones terminan a la misma altura.
+7. **Espaciado de los títulos de sección.** El estilo `heading 1` del modelo
+   declara `w:spacing before="480" after="120"`, es decir 24 pt y 6 pt. Esos
+   valores no se trasladan literalmente, porque Word los suma a la altura de
+   línea mientras `titlesec` los mide desde la línea base anterior. Se
+   calibraron midiendo los cuatro títulos de la página 2 contra el PDF que Word
+   exporta del modelo: el hueco anterior coincide en 18,0 pt y el posterior da
+   18,7 pt frente a 19,4 pt. Los valores resultantes son `13,4 pt` y `15 pt`.
+   Además, `\maketitle` no termina con un `\vspace`: el espacio que separa el
+   nombre del investigador del primer título lo aporta el `before-skip` de
+   `\titlespacing`, y los dos se suman en lugar de absorberse, de modo que un
+   `\vspace` allí duplicaba el hueco.
+8. **Folio de página.** El `.docx` del modelo no trae encabezado ni pie, de modo
+   que el original va sin numeración. La plantilla agrega el folio centrado al
+   pie (`\pagestyle{plain}`), porque el documento necesita numerarse para
+   citarse y para las devoluciones. La carátula queda sin número y la primera
+   carilla de texto es la 1. Para volver al modelo literal basta con
+   `\pagestyle{empty}` en `untref-plan.cls`.
+9. **Paquetes para figuras y tablas.** La clase carga `tikz`, `tabularx`,
+   `booktabs` y `float`, que el modelo no usa, para poder incluir esquemas y
+   tablas comparativas en el Marco Teórico.
 
 ## Citación y referencias
 
@@ -285,12 +377,26 @@ Diferencias observadas entre ambas rutas, con idéntico archivo `.bib`:
 |---|---|---|
 | Edición del manual | 6.ª | 7.ª |
 | Tres o más autores, primera cita narrativa | lista todos los autores | «et al.» |
-| Conjunción en la lista de referencias | «y» | «&» |
+| Conjunción en la lista de referencias | «y» | «y» (véase la nota) |
 | Tesis | «(Tesis doctoral)» | «[Tesis doctoral]» |
+| DOI | `doi: 10.0000/x` | `https://doi.org/10.0000/x` |
 | Procesador | `bibtex` | `biber` |
 
 Ambas opciones conservan el título «Referencias.», la sangría francesa de
 0,75 cm y la ausencia de espacio entre entradas que especifica el modelo.
+
+**Nota sobre la conjunción.** `biblatex-apa` antepone «&» al último autor, que
+es la forma inglesa; en español APA emplea «y». El estilo lo fija en tres
+lugares —`apa.bbx` para la lista de referencias, `apa.cbx` para `\parencite` y
+para `ullcite`—, mientras que `	extcite` ya recurre a `ibstring{and}`, que
+babel resuelve como «y». La clase replica esas tres definiciones sustituyendo
+`\&` por `ibstring{and}`, de modo que la salida no contiene ampersands.
+
+**Riesgo conocido de BibTeX.** El carácter `%` no introduce comentarios en un
+archivo `.bib`: BibTeX interpreta cualquier arroba como principio de entrada,
+incluso dentro de una línea que se pretendía comentada, y omite en silencio lo
+que sigue. Conviene no escribir arrobas en los comentarios. `biber` no presenta
+este comportamiento.
 
 ### Requisitos de la guía que la plantilla no puede verificar
 

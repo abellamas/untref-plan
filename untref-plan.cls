@@ -34,13 +34,23 @@
 \RequirePackage{multirow}
 \RequirePackage[table]{xcolor}
 \RequirePackage{setspace}
+% Figuras esquematicas (TikZ) y tablas del marco teorico.
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{float}
 
 % ---------------------------------------------------------------- pagina
 % <w:pgSz w:h="16838" w:w="11906"/> = A4
 % <w:pgMar top=1134 bottom=1134 left=1701 right=1134/> twips = 2/2/3/2 cm
 \RequirePackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=2cm]{geometry}
-% el .docx no trae header1.xml ni footer1.xml: sin encabezado, pie ni folio
-\pagestyle{empty}
+% El .docx no trae header1.xml ni footer1.xml, asi que el modelo va sin
+% encabezado ni pie. Se agrega igual el folio centrado al pie, que el
+% documento necesita para citarse y para las devoluciones de la catedra.
+% El entorno titlepage ya hace \thispagestyle{empty} y reinicia el contador,
+% de modo que la portada queda sin numero y la primera carilla de texto es 1.
+\pagestyle{plain}
 
 % ---------------------------------------------------------------- fuentes
 \RequirePackage{fontspec}
@@ -78,16 +88,19 @@
 % pero el renglon se arma distinto. Si hace falta acercarlo mas, descomentar:
 %
 % (1) INTERLINEADO. Word con interlineado "simple" en Times 12 pt deja unos
-%     13.8 pt entre lineas base; LaTeX en clase 12pt deja 14.5 pt.
-% \setstretch{0.952}
+%     13.8 pt entre lineas base; LaTeX en clase 12pt deja 14.5 pt. ACTIVADO:
+%     medido contra el PDF de Word, la pagina pasa de 613 a 658 palabras y Word
+%     tiene 657. No agrega ningun aviso de Overfull.
+\setstretch{0.952}
 %
 % (2) SEPARACION EN SILABAS. Word, por defecto, NO corta palabras al final de
-%     renglon; LaTeX si. Al desactivarla, los cortes de linea coinciden mas con
-%     Word, pero el texto justificado queda con espacios entre palabras mas
-%     grandes y pueden aparecer avisos de "Overfull hbox".
-% \hyphenpenalty=10000
-% \exhyphenpenalty=10000
-% \setlength{\emergencystretch}{3em}
+%     renglon; LaTeX si. ACTIVADO: con el \emergencystretch de 3em el texto
+%     justificado no sufre. Medido en este plan: con corte habia 10 palabras
+%     partidas en las dos paginas de la Fundamentacion y 2 avisos de Overfull;
+%     sin corte quedan 0 palabras partidas y 1 solo aviso.
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\setlength{\emergencystretch}{3em}
 
 % ---------------------------------------------------------------- titulos
 % numbering.xml abstractNum 2: "%1." y "%1.%2.", negrita, 14 pt (w:sz 28)
@@ -103,10 +116,14 @@
   {\untrefnum{0.614cm}{\thesection.}}{0pt}{}
 \titleformat{\subsection}[hang]{\untrefheadfont}%
   {\hspace*{0.614cm}\untrefnum{0.762cm}{\thesubsection.}}{0pt}{}
-% ponytail: el .docx separa titulos con parrafos vacios de 14 pt; aca es el
-% \titlespacing equivalente. Tocar estos dos valores si el ojo pide mas aire.
-\titlespacing*{\section}{0pt}{17pt}{17pt}
-\titlespacing*{\subsection}{0pt}{17pt}{17pt}
+% El estilo Heading1 del modelo declara <w:spacing before=480 after=120>, es
+% decir 24 pt y 6 pt. Esos valores NO se pueden trasladar tal cual: Word los
+% suma al alto de linea y titlesec los mide desde la linea base anterior. Los
+% de abajo estan calibrados midiendo los cuatro titulos de la pagina 2 contra
+% el PDF que Word exporta del modelo: el hueco anterior da 18.0 pt en los dos,
+% y el posterior 18.7 pt contra 19.4 pt.
+\titlespacing*{\section}{0pt}{13.4pt}{15pt}
+\titlespacing*{\subsection}{0pt}{13.4pt}{15pt}
 \setcounter{secnumdepth}{2}
 
 % ---------------------------------------------------------------- listas
@@ -186,7 +203,7 @@
 \fi
 
 % Con la opcion [biblatex]: biblatex-apa, que implementa APA 7 (et al. desde la
-% primera cita, "&" en la lista, tesis entre corchetes). Requiere biber.
+% primera cita, tesis entre corchetes, DOI como URL completa). Requiere biber.
 %   preambulo:  \bibliografia{referencias}      % lee referencias.bib
 %   cuerpo:     \referenciasbib
 %   citas:      \textcite{clave} narrativa, \parencite{clave} parentetica
@@ -200,6 +217,21 @@
   % biblatex deja glue elastico entre los caracteres de una URL, y al justificar
   % el DOI aparece con espacios ("https : / / doi . org"). Esto lo elimina.
   \appto{\biburlsetup}{\Urlmuskip=0mu\relax}
+  % biblatex-apa pone "&" antes del ultimo autor, que es la forma inglesa. En
+  % espanol APA usa "y". El estilo lo fija en tres lugares (apa.bbx linea 727
+  % para la lista, apa.cbx lineas 496 y 393 para las citas); \textcite ya usa
+  % \bibstring{and}, que babel resuelve como "y". Se replican las tres
+  % definiciones cambiando \& por \bibstring{and}.
+  \DeclareDelimFormat[bib,biblist]{finalnamedelim}{%
+    \ifthenelse{\value{listcount}>\maxprtauth}
+      {}
+      {\ifthenelse{\value{liststop}>2}
+         {\finalandcomma\addspace\bibstring{and}\space}
+         {\addspace\bibstring{and}\space}}}
+  \DeclareDelimFormat[parencite]{finalnamedelim}%
+    {\ifnum\value{liststop}>2 \finalandcomma\fi\addspace\bibstring{and}\space}
+  \DeclareDelimFormat[fullcite,fullcitebib]{finalnamedelim}%
+    {\ifnum\value{liststop}>2 \finalandcomma\fi\addspace\bibstring{and}\space}
   \newcommand{\bibliografia}[1]{\addbibresource{#1.bib}}
   \newcommand{\referenciasbib}{\section{Referencias.}\printbibliography[heading=none]}
 \fi
@@ -221,6 +253,11 @@
 \newcommand{\untref@encabezado}{%
   \hspace*{-1.31cm}%
   \setlength{\tabcolsep}{0pt}%
+  % arraystretch a 0 anula el puntal que array pone en cada fila. Sin esto la
+  % fila crece con la profundidad del puntal y el borde inferior baja: el marco
+  % medido daba 147 px contra los 136 px del modelo, y con esto da 141 px, con
+  % el borde inferior en la misma linea que el modelo.
+  \renewcommand{\arraystretch}{0}%
   \begin{tabular}{|p{3.79cm}|p{14.46cm}|}\hline
     \rule{0pt}{3.11cm} & \includegraphics[width=13.58cm,height=3.11cm]{figuras/logo-untref.png}\tabularnewline\hline
   \end{tabular}}
@@ -228,27 +265,49 @@
 \renewcommand{\maketitle}{%
   \begin{titlepage}
   \centering\portadafont
-  \vspace*{34pt}%                         [0][1] parrafos vacios de 14 pt
+  \vspace*{16.3pt}%                         [0][1] parrafos vacios de 14 pt
   \untref@encabezado\par
-  {\fontsize{16pt}{19.5pt}\selectfont\untref@carrera\par}
-  \vspace{66pt}%                          [5][6][7] vacios de 18 pt
+  \vspace{3.9pt}%  hueco que el modelo deja entre el marco y la carrera
+  % "INGENIERIA DE SONIDO" usa el estilo Subtitle del .docx: w:sz 36 = 18 pt,
+  % igual que el subtitulo del plan (no 16 pt).
+  {\fontsize{18pt}{22pt}\selectfont\untref@carrera\par}
+  % Los cuatro \vspace de la portada estan calibrados midiendo, elemento por
+  % elemento y sobre una imagen a 110 ppp, el PDF que Word exporta del modelo.
+  % No son la conversion directa de los parrafos vacios del .docx: el bloque de
+  % autor y tutores, a interlineado doble real, ocupa mas que en Word y hay que
+  % descontarlo del hueco anterior. Con estos valores la carrera, el titulo, el
+  % subtitulo y el bloque de autor caen a 2 px o menos de su posicion en Word.
+  \vspace{64.5pt}%                        [5][6][7] vacios de 18 pt
   {\bfseries\fontsize{22pt}{26.8pt}\selectfont\@title\par}
-  \vspace{26.8pt}%                        [9] vacio de 22 pt
+  \vspace{28.8pt}%                        [9] vacio de 22 pt
   {\fontsize{18pt}{22pt}\selectfont\untref@subtitulo\par}
-  \vspace{139.2pt}%                       [11]-[18] vacios
-  {\bfseries\fontsize{14pt}{17.1pt}\selectfont\setstretch{2.0}%  w:line=480 = doble
+  \vspace{115.6pt}%                        [11]-[18] vacios
+  % OJO CON EL ORDEN: \setstretch de setspace reaplica \@currsize, asi que si va
+  % DESPUES de \selectfont pisa el cuerpo elegido y vuelve a 12 pt. Va antes.
+  % Estilo EmphasisID del .docx: w:sz 28 = 14 pt, negrita, w:line 480 = doble.
+  {\bfseries\setstretch{2.0}\fontsize{14pt}{17.1pt}\selectfont
    Autor: \@author\par
    TUTOR/A: \untref@tutor\par
    \ifx\untref@cotutor\empty\else COTUTOR/A: \untref@cotutor\par\fi}
   \vfill
-  % grupo de dos lineas de 15.75 cm que encierra la fecha (wpg de 5669280 EMU)
-  \rule{15.75cm}{0.5pt}\par\vspace{3pt}
-  {\fontsize{14pt}{17.1pt}\selectfont\untref@defensa\par}
-  \vspace{3pt}\rule{15.75cm}{0.5pt}\par
+  % Grupo de dos lineas de 15.75 cm que encierra la fecha (wpg de 5669280 EMU).
+  % Estilo NoSpacing del .docx: w:sz 24 = 12 pt. Va como \vbox con \kern
+  % explicitos: tanto \par como \\ cuelan un \baselineskip y las dos reglas
+  % terminan a 35 pt una de otra, cuando en Word estan a 20 pt.
+  {\setstretch{1.0}\fontsize{12pt}{14.5pt}\selectfont
+   \vbox{\offinterlineskip
+         \hbox{\rule{15.75cm}{0.5pt}}\kern4pt
+         \hbox to 15.75cm{\hss\untref@defensa\hss}\kern4pt
+         \hbox{\rule{15.75cm}{0.5pt}}}\par}
   \vspace*{28pt}
   \end{titlepage}
   % parrafos [36] y [37]: ya sin <w:rFonts>, es decir Times como el cuerpo
   {\centering
    {\bfseries\fontsize{14pt}{17pt}\selectfont\@title\par}
-   {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}
-  \vspace{17pt}}
+   \vspace{17pt}%  [37] parrafo Title-2 vacio de 14 pt
+   {\bfseries\fontsize{12pt}{14.5pt}\selectfont\untref@investigador\par}\par}}
+% \maketitle NO cierra con un \vspace: el espacio que separa el nombre del
+% investigador del primer titulo lo pone el before-skip de \titlespacing, y los
+% dos se suman en lugar de absorberse. Con un \vspace{17pt} aca el hueco medido
+% daba 38.9 pt contra los 20.2 pt del PDF que Word exporta del modelo; sin el,
+% da 21.6 pt.
