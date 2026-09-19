@@ -1,6 +1,6 @@
 # Salidas de compilación
 build/
-plan.pdf
+main.pdf
 *.aux
 *.log
 *.out

@@ -112,7 +112,7 @@ de modo que el directorio de trabajo no se ensucia.
 
 | Orden | Efecto |
 |---|---|
-| `latexmk` | compila; el resultado queda en `build/plan.pdf` |
+| `latexmk` | compila; el resultado queda en `build/main.pdf` |
 | `latexmk -pvc` | recompila cada vez que se guarda |
 | `latexmk -c` | borra los auxiliares y conserva el PDF |
 | `latexmk -C` | borra también el PDF |
@@ -124,13 +124,13 @@ bibliografía. Con la opción `apacite` el procesador es `bibtex` en lugar de
 
 La directiva `@default_files` del `.latexmkrc` es necesaria porque `latexmk`
 sin argumentos compila todos los `.tex` del directorio. Importa cuando el plan
-se parte en un archivo por sección y `plan.tex` los carga con `\input`: los
+se parte en un archivo por sección y `main.tex` los carga con `\input`: los
 fragmentos no compilan por sí solos.
 
-El contenido se redacta exclusivamente en `plan.tex`. La totalidad del formato
+El contenido se redacta exclusivamente en `main.tex`. La totalidad del formato
 reside en `untref-plan.cls`, cuyas definiciones no requieren modificación.
 
-En `plan.tex` cada párrafo ocupa una sola línea, sin cortes manuales. En LaTeX
+En `main.tex` cada párrafo ocupa una sola línea, sin cortes manuales. En LaTeX
 los saltos de línea dentro de un párrafo se componen como espacios, de modo que
 la elección no afecta la salida, pero mantiene el archivo legible como un
 documento de texto y hace que cada modificación se corresponda con un párrafo
@@ -140,7 +140,7 @@ completo.
 
 ```
 .latexmkrc          configuración de latexmk: LuaLaTeX, biber y salida en build/
-plan.tex            documento de trabajo
+main.tex            documento de trabajo
 untref-plan.cls     definición del formato, con el origen de cada medida documentado
 figuras/            logotipo institucional y figura de ejemplo
 referencias.bib     base bibliográfica de ejemplo, una entrada por tipo de fuente
@@ -152,7 +152,7 @@ doc/                guía de estilo APA de la cátedra
 El directorio `build/` está excluido del control de versiones por contener
 únicamente archivos generados en cada compilación. La salida de referencia
 versionada es `ejemplo-plan.pdf`, que se actualiza a mano con
-`cp build/plan.pdf ejemplo-plan.pdf`.
+`cp build/main.pdf ejemplo-plan.pdf`.
 
 El archivo contenido en `modelo/` es material de cátedra de UNTREF y se incluye
 únicamente como referencia del formato exigido.
@@ -331,10 +331,10 @@ manual APA. Para habilitarlo:
 Compilación:
 
 ```
-lualatex plan.tex
+lualatex main.tex
 bibtex plan
-lualatex plan.tex
-lualatex plan.tex
+lualatex main.tex
+lualatex main.tex
 ```
 
 Citas en el texto: `\citeA{clave}` para las narrativas y `\cite{clave}` para las
@@ -361,10 +361,10 @@ procesador de bibliografía. Para habilitarlo:
 Compilación:
 
 ```
-lualatex plan.tex
+lualatex main.tex
 biber plan
-lualatex plan.tex
-lualatex plan.tex
+lualatex main.tex
+lualatex main.tex
 ```
 
 Citas en el texto: `\textcite{clave}` para las narrativas y `\parencite{clave}`
